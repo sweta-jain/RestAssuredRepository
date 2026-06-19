@@ -1,6 +1,7 @@
 package API_CRUD;
 
 import org.testng.Assert;
+
 import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
 
@@ -9,9 +10,10 @@ import io.restassured.response.Response;
 import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
 import io.restassured.http.ContentType;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 
-
+@SuppressWarnings("unused")
 public class testAPI_CRUD {
 	
 	@Test
@@ -32,14 +34,16 @@ public class testAPI_CRUD {
 		baseURI  = "http://localhost:3000";
 		
 		given().
-			param("firstName", "Peter").
+			//param("firstName", "Peter").
 			get("/users").
 		then().
 			statusCode(200).
-			body("id", hasItems("2")).
-			log().all();
+			assertThat().body(matchesJsonSchemaInClasspath("schema.json")).
+			//body("id", contains("2")).
+			log().all();	
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPost() {
 		JSONObject request = new JSONObject();
@@ -60,6 +64,7 @@ public class testAPI_CRUD {
 			log().all();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPatch() {
 		JSONObject request = new JSONObject();
@@ -78,6 +83,7 @@ public class testAPI_CRUD {
 			log().all();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testPut() {
 		JSONObject request = new JSONObject();
