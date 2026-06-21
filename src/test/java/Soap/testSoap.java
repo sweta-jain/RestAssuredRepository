@@ -13,15 +13,18 @@ import org.testng.annotations.Test;
 import io.restassured.http.ContentType;
 
 import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
+import static io.restassured.matcher.RestAssuredMatchers.matchesXsd;
 import static org.hamcrest.Matchers.*;
 
 public class testSoap {
 	
 	@Test
 	public void requestSoap() throws IOException {
-		File file = new File("./mockAPI/AddRequest.xml");
-		FileInputStream input = new FileInputStream(file);
+		File fileXML = new File("./mockAPI/AddRequest.xml");
+		FileInputStream input = new FileInputStream(fileXML);
 		String requestBody = IOUtils.toString(input, "UTF-8");	
+		
+		File fileXSD = new File("./src/main/resources/addRequest.xsd");
 		
 		baseURI  = "http://www.dneonline.com";
 		given().
@@ -35,6 +38,7 @@ public class testSoap {
 			log().all().
 		and().
 			body("//*:AddResult.text()", equalTo("5")).
+			assertThat().body(matchesXsd(fileXSD)).
 			assertThat().body(matchesXsdInClasspath("addRequest.xsd"));
 	}
 
