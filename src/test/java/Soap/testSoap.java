@@ -12,8 +12,7 @@ import org.testng.annotations.Test;
 
 import io.restassured.http.ContentType;
 
-//import static io.restassured.matcher.RestAssuredMatchers.matchesDtdInClasspath;
-import static io.restassured.matcher.RestAssuredMatchers.matchesXsd;
+import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
 import static org.hamcrest.Matchers.*;
 
 public class testSoap {
@@ -24,9 +23,7 @@ public class testSoap {
 		FileInputStream input = new FileInputStream(file);
 		String requestBody = IOUtils.toString(input, "UTF-8");	
 		
-		File file1 = new File("./src/main/resources/addRequest.xsd");
-		
-		baseURI  = "http://www.dneonline.com/";
+		baseURI  = "http://www.dneonline.com";
 		given().
 			contentType("text/xml").
 			accept(ContentType.XML).
@@ -38,8 +35,7 @@ public class testSoap {
 			log().all().
 		and().
 			body("//*:AddResult.text()", equalTo("5")).
-			assertThat().body(matchesXsd(file1));
-			//assertThat().body(matchesDtdInClasspath("addRequest.xsd"));
+			assertThat().body(matchesXsdInClasspath("addRequest.xsd"));
 	}
 
 }
